@@ -40,27 +40,39 @@ export default function App() {
         <GymDetailsBanner />
 
         {/* Hero Central Visual Object: Muscle Pump Station */}
-        <main className="flex-1">
-          <MusclePumpStation
-            soundEnabled={soundEnabled}
-            totalPumps={totalPumps}
-            setTotalPumps={setTotalPumps}
-          />
+        <main className="flex-1 pb-28 sm:pb-24">
+          <section id="pump-station">
+            <MusclePumpStation
+              soundEnabled={soundEnabled}
+              totalPumps={totalPumps}
+              setTotalPumps={setTotalPumps}
+            />
+          </section>
 
           {/* Vintage Workout of the Day Feature */}
-          <WorkoutOfTheDay soundEnabled={soundEnabled} />
+          <section id="workout-of-day">
+            <WorkoutOfTheDay soundEnabled={soundEnabled} />
+          </section>
 
           {/* Gym Reception Area & Member Fee Slip */}
-          <ReceptionLedger soundEnabled={soundEnabled} />
+          <section id="reception-ledger">
+            <ReceptionLedger soundEnabled={soundEnabled} />
+          </section>
 
           {/* Gym Cafe & Desi Shake Corner */}
-          <GymCafeMenu soundEnabled={soundEnabled} />
+          <section id="gym-cafe">
+            <GymCafeMenu soundEnabled={soundEnabled} />
+          </section>
 
           {/* Posters & Wall of Legends */}
-          <PosterWall />
+          <section id="poster-wall">
+            <PosterWall />
+          </section>
 
           {/* Desi Gym Interactive Soundboard */}
-          <SoundBoard soundEnabled={soundEnabled} />
+          <section id="soundboard">
+            <SoundBoard soundEnabled={soundEnabled} />
+          </section>
         </main>
 
         {/* Exact Required Footer */}

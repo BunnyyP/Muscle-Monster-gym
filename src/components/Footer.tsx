@@ -40,7 +40,7 @@ export const Footer: React.FC = () => {
         <div className="text-[10px] text-zinc-600 font-mono mt-2 flex items-center gap-1">
           <span>Crafted with</span>
           <Heart className="w-3 h-3 text-red-500 fill-red-500" />
-          <span>for Muscle Monster Gym • Est. 2002</span>
+          <span>for Muscle Monster Gym • Est. 2023</span>
         </div>
 
       </div>

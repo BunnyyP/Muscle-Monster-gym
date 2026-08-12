@@ -210,56 +210,56 @@ export const MusclePumpStation: React.FC<MusclePumpStationProps> = ({
                 rotate: isLifting ? [0, -1, 1, 0] : 0,
               }}
               transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-              className="relative w-full h-6 bg-gradient-to-b from-zinc-300 via-zinc-100 to-zinc-400 rounded-full border-y border-zinc-600 shadow-[0_10px_20px_rgba(0,0,0,0.8)] flex items-center justify-between px-8"
+              className="relative w-full h-5 sm:h-6 bg-gradient-to-b from-zinc-300 via-zinc-100 to-zinc-400 rounded-full border-y border-zinc-600 shadow-[0_10px_20px_rgba(0,0,0,0.8)] flex items-center justify-between px-2 sm:px-8 overflow-hidden sm:overflow-visible"
             >
               
               {/* Knurling Grip Center Lines */}
-              <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-48 bg-[repeating-linear-gradient(45deg,#000,#000_2px,#d4d4d8_2px,#d4d4d8_4px)] opacity-40 rounded" />
+              <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-28 sm:w-48 bg-[repeating-linear-gradient(45deg,#000,#000_2px,#d4d4d8_2px,#d4d4d8_4px)] opacity-40 rounded" />
 
               {/* Left Side Iron Plates */}
-              <div className="flex items-center -space-x-2 relative -left-6">
+              <div className="flex items-center -space-x-1.5 sm:-space-x-2 relative -left-1 sm:-left-6">
                 {Array.from({ length: activePlateCount }).map((_, idx) => (
                   <div
                     key={`left-${idx}`}
-                    className="w-8 h-32 sm:h-40 bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-950 border-2 border-amber-600/50 rounded-lg shadow-2xl flex items-center justify-center relative group"
+                    className="w-5 sm:w-8 h-28 sm:h-40 bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-950 border sm:border-2 border-amber-600/50 rounded-lg shadow-2xl flex items-center justify-center relative group"
                     style={{
                       boxShadow: 'inset 0 0 10px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.9)'
                     }}
                   >
-                    <span className="text-[9px] font-mono text-amber-500 font-bold -rotate-90 select-none">
+                    <span className="text-[8px] sm:text-[9px] font-mono text-amber-500 font-bold -rotate-90 select-none">
                       {selectedWeight / (activePlateCount * 2)} KG
                     </span>
                     {/* Metal rim highlight */}
-                    <div className="absolute inset-y-2 left-1/2 -translate-x-1/2 w-1 bg-amber-500/30 rounded" />
+                    <div className="absolute inset-y-2 left-1/2 -translate-x-1/2 w-0.5 sm:w-1 bg-amber-500/30 rounded" />
                   </div>
                 ))}
                 {/* Collar Lock */}
-                <div className="w-5 h-12 bg-amber-500 rounded border border-amber-300 shadow" />
+                <div className="w-3 sm:w-5 h-8 sm:h-12 bg-amber-500 rounded border border-amber-300 shadow" />
               </div>
 
               {/* Center Plate Weight Tag */}
-              <div className="z-10 px-4 py-1.5 bg-zinc-900/90 border border-amber-500/60 rounded-xl text-center shadow-lg">
-                <div className="text-[10px] font-mono uppercase text-zinc-400 tracking-wider">TOTAL WEIGHT</div>
-                <div className="text-xl font-black text-amber-400 font-mono">{selectedWeight} KG</div>
+              <div className="z-10 px-2 sm:px-4 py-1 sm:py-1.5 bg-zinc-900/90 border border-amber-500/60 rounded-xl text-center shadow-lg shrink-0">
+                <div className="text-[8px] sm:text-[10px] font-mono uppercase text-zinc-400 tracking-wider">TOTAL WEIGHT</div>
+                <div className="text-sm sm:text-xl font-black text-amber-400 font-mono">{selectedWeight} KG</div>
               </div>
 
               {/* Right Side Iron Plates */}
-              <div className="flex items-center -space-x-2 relative -right-6">
+              <div className="flex items-center -space-x-1.5 sm:-space-x-2 relative -right-1 sm:-right-6">
                 {/* Collar Lock */}
-                <div className="w-5 h-12 bg-amber-500 rounded border border-amber-300 shadow" />
+                <div className="w-3 sm:w-5 h-8 sm:h-12 bg-amber-500 rounded border border-amber-300 shadow" />
                 {Array.from({ length: activePlateCount }).map((_, idx) => (
                   <div
                     key={`right-${idx}`}
-                    className="w-8 h-32 sm:h-40 bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-950 border-2 border-amber-600/50 rounded-lg shadow-2xl flex items-center justify-center relative group"
+                    className="w-5 sm:w-8 h-28 sm:h-40 bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-950 border sm:border-2 border-amber-600/50 rounded-lg shadow-2xl flex items-center justify-center relative group"
                     style={{
                       boxShadow: 'inset 0 0 10px rgba(0,0,0,0.8), 0 5px 15px rgba(0,0,0,0.9)'
                     }}
                   >
-                    <span className="text-[9px] font-mono text-amber-500 font-bold -rotate-90 select-none">
+                    <span className="text-[8px] sm:text-[9px] font-mono text-amber-500 font-bold -rotate-90 select-none">
                       {selectedWeight / (activePlateCount * 2)} KG
                     </span>
                     {/* Metal rim highlight */}
-                    <div className="absolute inset-y-2 left-1/2 -translate-x-1/2 w-1 bg-amber-500/30 rounded" />
+                    <div className="absolute inset-y-2 left-1/2 -translate-x-1/2 w-0.5 sm:w-1 bg-amber-500/30 rounded" />
                   </div>
                 ))}
               </div>
