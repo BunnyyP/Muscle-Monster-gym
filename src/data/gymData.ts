@@ -5,7 +5,7 @@ export const INITIAL_TRACKS: Track[] = [
     id: '1',
     title: 'Muscle Monster Gym Anthem (Dhoom Mix)',
     artist: 'Pritam / Sunidhi Chauhan / Vishal',
-    youtubeId: 'iiBeBFRsCSQ',
+    youtubeId: '8afBXZawfQw',
     duration: '04:12',
     year: '2004',
     vibe: 'High Octane Bench Press Energy'

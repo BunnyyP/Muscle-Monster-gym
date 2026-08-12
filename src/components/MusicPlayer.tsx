@@ -194,7 +194,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
                   <span>2000s GYM BOLLYWOOD BANGER PLAYLIST</span>
                 </div>
                 <a
-                  href="https://youtu.be/iiBeBFRsCSQ?si=7WJDXdf8BCeyvidP"
+                  href="https://youtu.be/8afBXZawfQw?si=J-6UkqeEHC90O5oA"
                   target="_blank"
                   rel="noreferrer"
                   className="text-xs text-amber-400 hover:underline flex items-center gap-1 font-mono"
