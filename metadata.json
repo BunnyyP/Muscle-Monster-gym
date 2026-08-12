@@ -1,0 +1,6 @@
+{
+  "name": "Muscle Monster Gym 2000s",
+  "description": "A deeply nostalgic, interactive 2000s Indian gym experience with retro vibes, sound effects, workout tracks, and gym memories.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
