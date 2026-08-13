@@ -21,15 +21,24 @@ export const INITIAL_TRACKS: Track[] = [
   },
   {
     id: '3',
-    title: 'Dhoom Machale (Dhoom 1 Original)',
-    artist: 'Sunidhi Chauhan',
-    youtubeId: '1_I-m4cK0wM',
-    duration: '06:17',
-    year: '2004',
-    vibe: 'Cardio & Treadmill Banger'
+    title: 'Brothers Anthem (Bodybuilding Motivation)',
+    artist: 'Vishal Dadlani / Ajay-Atul',
+    youtubeId: '_3mS_8aA1M4',
+    duration: '05:53',
+    year: '2015',
+    vibe: 'Heavy Iron & Powerlifting Drive'
   },
   {
     id: '4',
+    title: 'Sultan Title Track (Bhai Gym Energy)',
+    artist: 'Sukhwinder Singh / Shadab Faridi',
+    youtubeId: 'm7B442P1C8E',
+    duration: '04:40',
+    year: '2016',
+    vibe: 'Desi Akhada & Heavy Squats'
+  },
+  {
+    id: '5',
     title: 'Zinda (Bhaag Milkha Bhaag)',
     artist: 'Siddharth Mahadevan / Shankar-Ehsaan-Loy',
     youtubeId: '822eS1Cj3p0',
@@ -38,7 +47,34 @@ export const INITIAL_TRACKS: Track[] = [
     vibe: 'Heavy Squats & Deadlift Fire'
   },
   {
-    id: '5',
+    id: '6',
+    title: 'Dangal Title Track (Workout Special)',
+    artist: 'Daler Mehndi / Pritam',
+    youtubeId: 'w4ClQO0FFQg',
+    duration: '04:59',
+    year: '2016',
+    vibe: 'Extreme Endurance & Max Reps'
+  },
+  {
+    id: '7',
+    title: 'Dhoom Machale (Dhoom 1 Original)',
+    artist: 'Sunidhi Chauhan',
+    youtubeId: '1_I-m4cK0wM',
+    duration: '06:17',
+    year: '2004',
+    vibe: 'Cardio & Treadmill Banger'
+  },
+  {
+    id: '8',
+    title: 'Kar Har Maidaan Fateh (Sanju)',
+    artist: 'Sukhwinder Singh / Shreya Ghoshal',
+    youtubeId: 'LdH7a0Y80UY',
+    duration: '03:25',
+    year: '2018',
+    vibe: 'Unstoppable Mindset & Stamina'
+  },
+  {
+    id: '9',
     title: 'Saki Saki (Musafir 2004 Classic)',
     artist: 'Sunidhi Chauhan / Sukhwinder Singh',
     youtubeId: 'qfEakfE9p34',
@@ -47,7 +83,7 @@ export const INITIAL_TRACKS: Track[] = [
     vibe: 'Late Night Heavy Iron Session'
   },
   {
-    id: '6',
+    id: '10',
     title: 'Malhari (Bajirao Mastani High Energy)',
     artist: 'Vishal Dadlani',
     youtubeId: 'Y8H4E3Y0Q8I',

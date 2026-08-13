@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { INITIAL_TRACKS } from '../data/gymData';
 import { Track } from '../types';
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Disc, ListMusic, Sparkles, ExternalLink } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Disc, ListMusic, Sparkles, ExternalLink, Shuffle, Flame } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 // YouTube IFrame Window Declaration
@@ -25,6 +25,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
   const [progress, setProgress] = useState<number>(0);
   const [currentTimeStr, setCurrentTimeStr] = useState<string>('00:00');
   const [showPlaylistDrawer, setShowPlaylistDrawer] = useState<boolean>(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>('ALL');
 
   const playerRef = useRef<any>(null);
   const progressIntervalRef = useRef<any>(null);
@@ -33,7 +34,6 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
 
   // Initialize YouTube IFrame API
   useEffect(() => {
-    // Load YouTube IFrame API script if not already loaded
     if (!window.YT) {
       const tag = document.createElement('script');
       tag.src = 'https://www.youtube.com/iframe_api';
@@ -82,7 +82,8 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
             setIsPlaying(false);
             stopProgressTracker();
           } else if (event.data === window.YT.PlayerState.ENDED) {
-            handleNextTrack();
+            // Auto advance to next track in playlist when track ends
+            handleNextTrack(true);
           }
         },
       },
@@ -119,6 +120,20 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
     }
   }, [currentTrackIndex]);
 
+  const playSpecificTrack = (index: number) => {
+    setCurrentTrackIndex(index);
+    setIsPlaying(true);
+    if (playerRef.current && playerRef.current.loadVideoById) {
+      playerRef.current.loadVideoById(tracks[index].youtubeId);
+      playerRef.current.playVideo();
+    }
+  };
+
+  const autoSelectAndPlayRandom = () => {
+    const randomIndex = Math.floor(Math.random() * tracks.length);
+    playSpecificTrack(randomIndex);
+  };
+
   const togglePlay = () => {
     if (!playerRef.current) return;
     if (isPlaying) {
@@ -130,12 +145,25 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
     }
   };
 
-  const handleNextTrack = () => {
-    setCurrentTrackIndex((prev) => (prev + 1) % tracks.length);
+  const handleNextTrack = (shouldAutoPlay = isPlaying) => {
+    const nextIndex = (currentTrackIndex + 1) % tracks.length;
+    setCurrentTrackIndex(nextIndex);
+    if (shouldAutoPlay) {
+      setIsPlaying(true);
+      if (playerRef.current && playerRef.current.loadVideoById) {
+        playerRef.current.loadVideoById(tracks[nextIndex].youtubeId);
+        playerRef.current.playVideo();
+      }
+    }
   };
 
   const handlePrevTrack = () => {
-    setCurrentTrackIndex((prev) => (prev - 1 + tracks.length) % tracks.length);
+    const prevIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+    setCurrentTrackIndex(prevIndex);
+    if (isPlaying && playerRef.current && playerRef.current.loadVideoById) {
+      playerRef.current.loadVideoById(tracks[prevIndex].youtubeId);
+      playerRef.current.playVideo();
+    }
   };
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -171,6 +199,10 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
     setProgress(pct * 100);
   };
 
+  const filteredTracks = selectedCategory === 'ALL'
+    ? tracks
+    : tracks.filter(t => t.vibe.toLowerCase().includes(selectedCategory.toLowerCase()));
+
   return (
     <>
       {/* Hidden YouTube IFrame Container */}
@@ -186,59 +218,104 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
               initial={{ opacity: 0, y: 20, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.98 }}
-              className="mb-3 p-4 bg-zinc-950/95 backdrop-blur-xl border border-amber-500/40 rounded-2xl shadow-2xl max-h-72 overflow-y-auto"
+              className="mb-3 p-4 bg-zinc-950/98 backdrop-blur-xl border-2 border-amber-500/50 rounded-2xl shadow-2xl max-h-80 overflow-y-auto"
             >
-              <div className="flex items-center justify-between pb-3 border-b border-zinc-800 mb-3">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-zinc-800 mb-3 gap-2">
                 <div className="flex items-center gap-2 text-sm font-bold text-amber-400 uppercase font-mono">
                   <ListMusic className="w-4 h-4 text-amber-400" />
-                  <span>2000s GYM BOLLYWOOD BANGER PLAYLIST</span>
+                  <span>2000s DESI GYM WORKOUT PLAYLIST ({tracks.length} BANGERS)</span>
                 </div>
-                <a
-                  href="https://youtu.be/8afBXZawfQw?si=J-6UkqeEHC90O5oA"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-xs text-amber-400 hover:underline flex items-center gap-1 font-mono"
-                >
-                  <span>Open Original YouTube Link</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={autoSelectAndPlayRandom}
+                    className="px-3 py-1 bg-gradient-to-r from-amber-500 to-orange-500 text-zinc-950 rounded-lg text-xs font-mono font-bold flex items-center gap-1 hover:scale-105 transition-transform shadow"
+                  >
+                    <Shuffle className="w-3.5 h-3.5" /> SHUFFLE & AUTO-PLAY
+                  </button>
+                  <a
+                    href={`https://www.youtube.com/watch?v=${currentTrack.youtubeId}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs text-amber-400 hover:underline flex items-center gap-1 font-mono"
+                  >
+                    <span>Open YouTube</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                {tracks.map((t, idx) => (
+              {/* Category Pills for Auto-Filtering */}
+              <div className="flex items-center gap-1.5 overflow-x-auto pb-2 mb-3 text-[11px] font-mono">
+                {['ALL', 'Bench Press', 'Hard Core', 'Powerlifting', 'Squats', 'Cardio'].map((cat) => (
                   <button
-                    key={t.id}
-                    onClick={() => {
-                      setCurrentTrackIndex(idx);
-                      setShowPlaylistDrawer(false);
-                      setIsPlaying(true);
-                      if (playerRef.current) playerRef.current.playVideo();
-                    }}
-                    className={`w-full p-2.5 rounded-xl text-left flex items-center justify-between transition-all text-xs font-mono ${
-                      idx === currentTrackIndex
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold'
-                        : 'bg-zinc-900/60 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                    key={cat}
+                    onClick={() => setSelectedCategory(cat)}
+                    className={`px-2.5 py-1 rounded-lg border whitespace-nowrap transition-colors ${
+                      selectedCategory === cat
+                        ? 'bg-amber-500 text-zinc-950 border-amber-300 font-bold'
+                        : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:text-zinc-200'
                     }`}
                   >
-                    <div className="flex items-center gap-3">
-                      <span className="w-5 text-amber-500 font-bold">#{idx + 1}</span>
-                      <div>
-                        <div className="text-zinc-200 text-sm font-sans font-bold">{t.title}</div>
-                        <div className="text-zinc-400 text-[11px]">{t.artist} • {t.year}</div>
-                      </div>
-                    </div>
-                    <span className="px-2 py-0.5 bg-black/40 text-amber-400 rounded text-[10px] border border-amber-500/20">
-                      {t.vibe}
-                    </span>
+                    {cat}
                   </button>
                 ))}
+              </div>
+
+              {/* Track List */}
+              <div className="space-y-2">
+                {filteredTracks.map((t) => {
+                  const originalIndex = tracks.findIndex(tr => tr.id === t.id);
+                  const isCurrent = originalIndex === currentTrackIndex;
+                  return (
+                    <button
+                      key={t.id}
+                      onClick={() => {
+                        playSpecificTrack(originalIndex);
+                        setShowPlaylistDrawer(false);
+                      }}
+                      className={`w-full p-2.5 rounded-xl text-left flex items-center justify-between transition-all text-xs font-mono ${
+                        isCurrent
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 font-bold shadow-md'
+                          : 'bg-zinc-900/80 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <span className="w-5 text-amber-500 font-bold shrink-0">#{originalIndex + 1}</span>
+                        <div className="min-w-0">
+                          <div className="text-zinc-200 text-sm font-sans font-bold truncate">{t.title}</div>
+                          <div className="text-zinc-400 text-[11px] truncate">{t.artist} • {t.year}</div>
+                        </div>
+                      </div>
+                      <span className="px-2 py-0.5 bg-black/50 text-amber-400 rounded text-[10px] border border-amber-500/30 shrink-0 ml-2">
+                        {t.vibe}
+                      </span>
+                    </button>
+                  );
+                })}
               </div>
             </motion.div>
           )}
         </AnimatePresence>
 
+        {/* Auto-Play Header Banner when audio is stopped */}
+        {!isPlaying && (
+          <div className="mb-2 bg-gradient-to-r from-amber-600 via-orange-500 to-red-600 rounded-xl px-3 py-1.5 flex items-center justify-between text-zinc-950 font-mono text-xs font-black shadow-lg animate-pulse border border-amber-300">
+            <div className="flex items-center gap-1.5">
+              <Flame className="w-4 h-4 fill-zinc-950" />
+              <span>AUTO-SELECT YOUTUBE WORKOUT PLAYLIST READY</span>
+            </div>
+            <button
+              onClick={() => playSpecificTrack(currentTrackIndex)}
+              className="px-2.5 py-0.5 bg-zinc-950 text-amber-400 rounded-md text-[11px] uppercase tracking-wider font-bold hover:bg-zinc-900 transition-colors flex items-center gap-1"
+            >
+              <Play className="w-3 h-3 fill-amber-400" /> Start Playing
+            </button>
+          </div>
+        )}
+
         {/* Main Player Bar */}
-        <div className="bg-zinc-950/80 backdrop-blur-2xl border-2 border-amber-500/40 rounded-2xl p-3 sm:p-4 shadow-[0_10px_40px_rgba(0,0,0,0.9)] flex flex-col sm:flex-row items-center justify-between gap-3 relative overflow-hidden">
+        <div className="bg-zinc-950/90 backdrop-blur-2xl border-2 border-amber-500/40 rounded-2xl p-3 sm:p-4 shadow-[0_10px_40px_rgba(0,0,0,0.9)] flex flex-col sm:flex-row items-center justify-between gap-3 relative overflow-hidden">
           
           {/* Track Info & Vinyl Spinning Icon */}
           <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -248,7 +325,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
 
             <div className="min-w-0 flex-1 sm:max-w-xs">
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-1.5 py-0.2 bg-amber-500/20 text-amber-400 rounded border border-amber-500/30 uppercase">
+                <span className="text-[10px] font-mono px-1.5 py-0.2 bg-amber-500/20 text-amber-400 rounded border border-amber-500/30 uppercase font-bold">
                   NOW PLAYING
                 </span>
                 {isPlaying && (
@@ -288,7 +365,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
               </button>
 
               <button
-                onClick={handleNextTrack}
+                onClick={() => handleNextTrack(true)}
                 className="p-2 text-zinc-400 hover:text-amber-400 transition-colors"
                 title="Next Track"
               >
@@ -314,7 +391,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
           </div>
 
           {/* Right Volume & Playlist Selector */}
-          <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-end">
             
             {/* Equalizer Visualizer Animation */}
             <div className="hidden md:flex items-center gap-1 h-5 px-2">
@@ -331,6 +408,15 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
                 />
               ))}
             </div>
+
+            {/* Auto Shuffle Button */}
+            <button
+              onClick={autoSelectAndPlayRandom}
+              className="p-2 bg-zinc-900 hover:bg-amber-500/20 text-amber-400 border border-zinc-800 rounded-xl transition-colors flex items-center gap-1 text-xs font-mono"
+              title="Shuffle & Auto-Play Workout Track"
+            >
+              <Shuffle className="w-4 h-4" />
+            </button>
 
             {/* Volume Control */}
             <div className="flex items-center gap-1.5">
@@ -358,7 +444,7 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
               title="Toggle Playlist Drawer"
             >
               <ListMusic className="w-4 h-4" />
-              <span className="hidden lg:inline">TRACKS</span>
+              <span className="hidden lg:inline">TRACKS ({tracks.length})</span>
             </button>
           </div>
 
@@ -368,3 +454,4 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = () => {
     </>
   );
 };
+
